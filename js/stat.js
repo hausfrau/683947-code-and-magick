@@ -10,7 +10,7 @@ var FONT_HEIGHT = 16;
 var BAR_WIDTH = 40;
 var BAR_CHART_HEIGHT = 150;
 var BAR_GAP = 50;
-var barHeight = BAR_CHART_HEIGHT - GAP - FONT_HEIGHT;
+var barHeight = BAR_CHART_HEIGHT - GAP - 2 * FONT_HEIGHT;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -44,10 +44,13 @@ window.renderStatistics = function (ctx, players, times) {
   for (var i = 0; i < players.length; i++) {
     var x = CLOUD_X + OUTER_GAP + (BAR_WIDTH + BAR_GAP) * i;
     var y = CLOUD_HEIGHT - OUTER_GAP;
+    var score = Math.round(times[i]);
     var playerBarHeight = (barHeight * times[i]) / maxTime;
     var recY = y - FONT_HEIGHT - playerBarHeight;
+    var scoreY = recY - GAP;
     var blueColor = 'rgb(0, 0, ' + Math.floor(Math.random() * 256) + ')';
 
+    ctx.fillText(score, x, scoreY, BAR_WIDTH);
     ctx.fillText(players[i], x, y, BAR_WIDTH);
 
     if (players[i].toString() === 'Вы') {
