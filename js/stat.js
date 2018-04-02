@@ -6,11 +6,11 @@ var CLOUD_X = 100;
 var CLOUD_Y = 10;
 var GAP = 10;
 var OUTER_GAP = 30;
-var FONT_HEIGHT = 16;
+var FONT_SIZE = 16;
 var BAR_WIDTH = 40;
 var BAR_CHART_HEIGHT = 150;
 var BAR_GAP = 50;
-var barHeight = BAR_CHART_HEIGHT - GAP - 2 * FONT_HEIGHT;
+var BAR_HEIGHT = BAR_CHART_HEIGHT - GAP - 2 * FONT_SIZE;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -28,7 +28,7 @@ var getMaxElement = function (arr) {
   return maxElement;
 };
 
-window.renderStatistics = function (ctx, players, times) {
+window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
@@ -39,21 +39,21 @@ window.renderStatistics = function (ctx, players, times) {
   ctx.fillStyle = '#000';
   ctx.font = '16px PT Mono';
   ctx.fillText('Ура вы победили!', CLOUD_X + OUTER_GAP, CLOUD_Y + OUTER_GAP);
-  ctx.fillText('Список результатов:', CLOUD_X + OUTER_GAP, CLOUD_Y + 2 * FONT_HEIGHT + OUTER_GAP);
+  ctx.fillText('Список результатов:', CLOUD_X + OUTER_GAP, CLOUD_Y + 2 * FONT_SIZE + OUTER_GAP);
 
-  for (var i = 0; i < players.length; i++) {
+  for (var i = 0; i < names.length; i++) {
     var x = CLOUD_X + OUTER_GAP + (BAR_WIDTH + BAR_GAP) * i;
     var y = CLOUD_HEIGHT - OUTER_GAP;
-    var score = Math.round(times[i]);
-    var playerBarHeight = (barHeight * times[i]) / maxTime;
-    var recY = y - FONT_HEIGHT - playerBarHeight;
+    var score = String(Math.round(times[i]));
+    var playerBarHeight = (BAR_HEIGHT * times[i]) / maxTime;
+    var recY = y - FONT_SIZE - playerBarHeight;
     var scoreY = recY - GAP;
-    var blueColor = 'rgb(0, 0, ' + Math.floor(Math.random() * 256) + ')';
+    var blueColor = 'rgb(0, 0, 255, ' + Math.random() + ')';
 
     ctx.fillText(score, x, scoreY, BAR_WIDTH);
-    ctx.fillText(players[i], x, y, BAR_WIDTH);
+    ctx.fillText(names[i], x, y, BAR_WIDTH);
 
-    if (players[i].toString() === 'Вы') {
+    if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     } else {
       ctx.fillStyle = blueColor;
