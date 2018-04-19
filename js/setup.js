@@ -23,9 +23,9 @@ var setupUserName = setupTitle.querySelector('.setup-user-name');
 var setupWizard = setupPlayer.querySelector('.setup-wizard');
 var wizardEyes = setupWizard.querySelector('.wizard-eyes');
 var setupFireballWrap = setupPlayer.querySelector('.setup-fireball-wrap');
+var inputEyesColor = setupPlayer.querySelector('input[name=eyes-color]');
 var inputFireballColor = setupFireballWrap.querySelector('input[name=fireball-color]');
 var setupClose = setupTitle.querySelector('.setup-close');
-var setupSubmit = userForm.querySelector('.setup-submit');
 var setupSimilarListElement = userDialog.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template');
 var setupSimilarItemTemplate = similarWizardTemplate.content.querySelector('.setup-similar-item');
@@ -79,11 +79,6 @@ var openDialog = function () {
   document.addEventListener('keydown', escKeyHandler);
 };
 
-var closeDialog = function () {
-  userDialog.classList.add('hidden');
-  document.removeEventListener('keydown', escKeyHandler);
-};
-
 setupOpen.addEventListener('click', openDialog);
 
 setupOpen.addEventListener('keydown', function (evt) {
@@ -91,6 +86,11 @@ setupOpen.addEventListener('keydown', function (evt) {
     openDialog();
   }
 });
+
+var closeDialog = function () {
+  userDialog.classList.add('hidden');
+  document.removeEventListener('keydown', escKeyHandler);
+};
 
 setupClose.addEventListener('click', function () {
   closeDialog();
@@ -102,45 +102,21 @@ setupClose.addEventListener('keydown', function (evt) {
   }
 });
 
-var colorizeEyes = function () {
-  wizardEyes.style.fill = eyesColors[getRandomInt(0, eyesColors.length - 1)];
-};
-
-wizardEyes.addEventListener('click', colorizeEyes);
-
-var colorizeFireballWrap = function () {
-  var color = fireballWrapColors[getRandomInt(0, fireballWrapColors.length - 1)];
-  setupFireballWrap.style.background = color;
-  inputFireballColor.value = color;
-};
-
-setupFireballWrap.addEventListener('click', colorizeFireballWrap);
-
-var validate = function (evt) {
-  evt.preventDefault();
-  var returnValue = true;
-  var elements = userForm.elements;
-  for (var i = 0; i < elements.length; i++) {
-    var element = elements[i];
-    if (!element.validity.valid) {
-      returnValue = false;
+var colorizeElement = function (element, colors, parentElement, hiddenElement) {
+  element.addEventListener('click', function () {
+    var color = colors[getRandomInt(0, colors.length - 1)];
+    if (parentElement.tagName === 'DIV') {
+      parentElement.style.backgroundColor = color;
+    } else {
+      parentElement.style.fill = color;
     }
-  }
-  return returnValue;
+    hiddenElement.value = color;
+  });
 };
 
-var setupSubmitKeydownHandler = function (evt) {
-  evt.preventDefault();
-  var returnValue = true;
-  if (evt.keyCode === ENTER_KEYCODE) {
-    returnValue = validate();
-  }
-  return returnValue;
-};
+colorizeElement(wizardEyes, eyesColors, wizardEyes, inputEyesColor);
 
-setupSubmit.addEventListener('click', validate);
-
-setupSubmit.addEventListener('keydown', setupSubmitKeydownHandler);
+colorizeElement(setupFireballWrap, fireballWrapColors, setupFireballWrap, inputFireballColor);
 
 var init = function () {
   setupOpenIcon.tabIndex = TABINDEX;
